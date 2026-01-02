@@ -2,6 +2,7 @@
 
 module Types
   class UserType < Types::BaseObject
+    # Fields of the User type
     field :id, ID, null: false
     field :first_name, String
     field :last_name, String
