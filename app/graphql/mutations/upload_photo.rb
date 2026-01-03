@@ -2,7 +2,8 @@
 
 module Mutations
   class UploadPhoto < BaseMutation
-    argument :image, ApolloUploadServer::Upload, required: true
+    argument :image, String, required: true
+    # argument :image, ApolloUploadServer::Upload, required: true
     argument :position, Integer, required: false
     argument :is_primary, Boolean, required: false
 
