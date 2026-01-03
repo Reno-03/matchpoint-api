@@ -1,24 +1,29 @@
-# Clear existing data
-User.destroy_all
+# db/seeds.rb
+Match.destroy_all
 Swipe.destroy_all
 Photo.destroy_all
-Match.destroy_all
+User.destroy_all
+
+# Reset primary key sequences for Postgres
+ActiveRecord::Base.connection.reset_pk_sequence!('users')
+ActiveRecord::Base.connection.reset_pk_sequence!('photos')
+ActiveRecord::Base.connection.reset_pk_sequence!('swipes')
+ActiveRecord::Base.connection.reset_pk_sequence!('matches')
 
 # Create Admin
-admin = User.find_or_create_by!(
-  first_name: "Admin",
-  last_name: "User",
-  email: "admin@matchpoint.com",
-  password: "admin123",
-  birthdate: "1990-01-01",
-  gender: "Other",
-  gender_interest: "Both",
-  country: "Philippines",
-  city: "Manila",
-  role: "admin"
-)
+admin = User.find_or_create_by!(email: "admin@matchpoint.com") do |u|
+  u.first_name = "Admin"
+  u.last_name = "User"
+  u.password = "admin123"
+  u.birthdate = "1990-01-01"
+  u.gender = "Other"
+  u.gender_interest = "Both"
+  u.country = "Philippines"
+  u.city = "Manila"
+  u.role = "admin"
+end
 
-puts "✅ Admin created: #{admin.email}"
+puts "✅ Admin: #{admin.email}"
 
 # Create Test Users
 users_data = [
@@ -30,23 +35,19 @@ users_data = [
   { first_name: "Loreen", last_name: "Yboa", gender: "Male", gender_interest: "Female", city: "Catbalogan" },
 ]
 
-users_data.each_with_index do |data, index|
-  user = User.find_or_create_by!(
-    first_name: data[:first_name],
-    last_name: data[:last_name],
-    email: "#{data[:first_name].downcase}@test.com",
-    password: "password123",
-    birthdate: "1998-01-01",
-    gender: data[:gender],
-    gender_interest: data[:gender_interest],
-    country: "Philippines",
-    city: data[:city],
-    bio: "Hi! I'm #{data[:first_name]} from #{data[:city]}.",
-    role: "user"
-  )
-  
-  puts "✅ User created: #{user.email}"
+users_data.each do |data|
+  User.find_or_create_by!(email: "#{data[:first_name].downcase}@test.com") do |u|
+    u.first_name = data[:first_name]
+    u.last_name = data[:last_name]
+    u.password = "password123"
+    u.birthdate = "1998-01-01"
+    u.gender = data[:gender]
+    u.gender_interest = data[:gender_interest]
+    u.country = "Philippines"
+    u.city = data[:city]
+    u.bio = "Hi! I'm #{data[:first_name]} from #{data[:city]}."
+    u.role = "user"
+  end
 end
 
-puts "\n🎉 Seeding complete!"
-puts "Total users: #{User.count}"
+puts "🎉 Total users: #{User.count}"
