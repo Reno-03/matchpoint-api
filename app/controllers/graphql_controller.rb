@@ -11,6 +11,7 @@ class GraphqlController < ApplicationController
     query = params[:query]
     operation_name = params[:operationName]
     context = {
+      # used by graphql to identify current user making the request
       current_user: current_user
     }
     result = MatchpointApiSchema.execute(query, variables: variables, context: context, operation_name: operation_name)

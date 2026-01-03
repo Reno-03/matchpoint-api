@@ -8,6 +8,7 @@ class CreatePhotos < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
+    # Index, sorted list for fast searching 
     add_index :photos, [:user_id, :position]
   end
 end

@@ -2,6 +2,7 @@
 
 module Types
   class MutationType < Types::BaseObject
+    # Mutations for swiping app
     field :create_swipe, mutation: Mutations::CreateSwipe
     field :upload_photo, mutation: Mutations::UploadPhoto
 

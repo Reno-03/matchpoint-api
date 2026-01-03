@@ -1,4 +1,4 @@
-# set up CORS to accept cross-origin AJAX requests
+# set up CORS to accept cross-origin AJAX requests like Apollo GraphQL client
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     origins '*'

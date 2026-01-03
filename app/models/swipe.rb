@@ -11,6 +11,7 @@ class Swipe < ApplicationRecord
   validates :swiper_id, uniqueness: { scope: :swiped_id, message: 'already swiped on this user' }
   validate :cannot_swipe_self
 
+  # after creating a swipe, check for mutual likes to create a match
   after_create :check_for_match, if: :like?
 
   # method to check if the swipe action is a 'like'

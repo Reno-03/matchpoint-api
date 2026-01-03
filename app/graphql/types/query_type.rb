@@ -21,20 +21,14 @@ module Types
     # Add root-level fields here.
     # They will be entry points for queries on your schema.
 
-    # TODO: remove me
-    field :test_field, String, null: false,
-      description: "An example field added by the generator"
-    def test_field
-      "Hello World!"
-    end
-
     # GRAPHQL QUERIES FOR SWIPING APP
+    
     # Get swipe deck query
+    # Logic for swipe deck, filtering out already swiped users and matching preferences (gender)
     field :swipe_deck, [Types::UserType], null: false do
       description "Get users for swiping based on preferences"
       argument :limit, Integer, required: false, default_value: 20
     end
-
     def swipe_deck(limit:)
       user = context[:current_user]
       return [] unless user
@@ -60,17 +54,15 @@ module Types
       query.limit(limit).order("RANDOM()")
     end
 
-    # Also add current user query
-    field :current_user, Types::UserType, null: true
 
+    # current user query
+    field :current_user, Types::UserType, null: true
     def current_user
       context[:current_user]
     end
 
-    # get match by ID query
-    # My matches query
+    # Query my matches, for current user
     field :my_matches, [Types::MatchType], null: false
-
     def my_matches
       user = context[:current_user]
       return [] unless user

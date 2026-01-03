@@ -2,6 +2,7 @@ class User < ApplicationRecord
   # used for password hashing and authentication  
   has_secure_password
 
+  # associations
   has_many :photos, dependent: :destroy
   has_many :swipes_made, class_name: 'Swipe', foreign_key: 'swiper_id', dependent: :destroy
   has_many :swipes_received, class_name: 'Swipe', foreign_key: 'swiped_id', dependent: :destroy
@@ -34,12 +35,14 @@ class User < ApplicationRecord
     return unless birthdate
     today = Date.today
     age = today.year - birthdate.year
+    # adjust age if birthday hasn't occurred yet this year
     age -= 1 if birthdate > today - age.years
     age
   end
 
   private
 
+  # PHOTO SCOPES
   # Validates that the user is at least 18 years old
   def must_be_18_or_older
     errors.add(:birthdate, 'must be 18 or older') if age && age < 18
@@ -51,10 +54,14 @@ class User < ApplicationRecord
   end
 
   public
+
+  # PHOTO-RELATED METHODS
+  # a method that returns the primary photo of the user
   def primary_photo
     photos.find_by(is_primary: true) || photos.ordered.first
   end
 
+  # a method that returns URLs of all photos of the user
   def photo_urls
     photos.ordered.map do |photo|
       Rails.application.routes.url_helpers.url_for(photo.image) if photo.image.attached?
