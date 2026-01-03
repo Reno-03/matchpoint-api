@@ -1,8 +1,8 @@
 # db/seeds.rb
-Match.destroy_all
-Swipe.destroy_all
-Photo.destroy_all
-User.destroy_all
+Match.delete_all
+Swipe.delete_all
+Photo.delete_all
+User.delete_all
 
 # Reset primary key sequences for Postgres
 ActiveRecord::Base.connection.reset_pk_sequence!('users')
