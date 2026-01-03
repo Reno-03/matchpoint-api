@@ -5,7 +5,7 @@ Photo.destroy_all
 Match.destroy_all
 
 # Create Admin
-admin = User.create!(
+admin = User.find_or_create_by!(
   first_name: "Admin",
   last_name: "User",
   email: "admin@matchpoint.com",
@@ -31,7 +31,7 @@ users_data = [
 ]
 
 users_data.each_with_index do |data, index|
-  user = User.create!(
+  user = User.find_or_create_by!(
     first_name: data[:first_name],
     last_name: data[:last_name],
     email: "#{data[:first_name].downcase}@test.com",
