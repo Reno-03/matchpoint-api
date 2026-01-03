@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  swiper: one
+  swiped: one
+  action: MyString
+
+two:
+  swiper: two
+  swiped: two
+  action: MyString
