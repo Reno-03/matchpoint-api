@@ -22,7 +22,12 @@ class User < ApplicationRecord
   # before creating a user, set default role to 'user' if not provided
   before_validation :set_default_role
   
-  validates :photos, length: { minimum: 1, maximum: 5, message: 'must have 1-5 photos' }
+  # validates :photos, length: { minimum: 1, maximum: 5, message: 'must have 1-5 photos' }
+
+  # MATCH ASSOCIATIONS
+  # for each user, define associations to matches where they are user1 or user2 in the Match model
+  has_many :matches_as_user1, class_name: 'Match', foreign_key: 'user1_id', dependent: :destroy
+  has_many :matches_as_user2, class_name: 'Match', foreign_key: 'user2_id', dependent: :destroy
 
   # this function calculates the age of the user based on birthdate
   def age
@@ -54,5 +59,16 @@ class User < ApplicationRecord
     photos.ordered.map do |photo|
       Rails.application.routes.url_helpers.url_for(photo.image) if photo.image.attached?
     end.compact
+  end
+
+  # MATCH-RELATED METHODS
+  # a method that returns all matches involving this user
+  def all_matches
+    Match.where('user1_id = ? OR user2_id = ?', id, id)
+  end
+
+  # a method that returns all users matched with this user
+  def matched_users
+    all_matches.map { |match| match.other_user(id) }
   end
 end
