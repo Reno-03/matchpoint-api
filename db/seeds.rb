@@ -9,7 +9,7 @@
 #   end
 
 
-User.create!(
+User.find_or_create_by!(
   first_name: "Admin",
   last_name: "User",
   email: "admin@matchpoint.com",
@@ -20,4 +20,30 @@ User.create!(
   country: "PH",
   city: "Manila",
   role: "admin"
+)
+
+User.find_or_create_by!(
+  first_name: "Loreen",
+  last_name: "Yboa",
+  email: "loreen@test.com",
+  password: "password123",
+  birthdate: "1990-01-01",
+  gender: "Male",
+  gender_interest: "Female",
+  country: "PH",
+  city: "Manila",
+  role: "user"
+)
+
+User.find_or_create_by!(
+  first_name: "Alice",
+  last_name: "Smith",
+  email: "alice@test.com",
+  password: "password123",
+  birthdate: "1990-01-01",
+  gender: "Female",
+  gender_interest: "Male",
+  country: "PH",
+  city: "Manila",
+  role: "user"
 )
