@@ -6,22 +6,32 @@ class GraphqlController < ApplicationController
   # but you'll have to authenticate your user separately
   # protect_from_forgery with: :null_session
 
-  def execute
+   def execute
     variables = prepare_variables(params[:variables])
     query = params[:query]
     operation_name = params[:operationName]
     context = {
-      # Query context goes here, for example:
-      # current_user: current_user,
+      current_user: current_user
     }
     result = MatchpointApiSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
     render json: result
-  rescue StandardError => e
-    raise e unless Rails.env.development?
-    handle_error_in_development(e)
+    rescue StandardError => e
+      raise e unless Rails.env.development?
+      handle_error_in_development(e)
   end
 
   private
+
+  def current_user
+    return nil unless request.headers['Authorization'].present?
+    
+    token = request.headers['Authorization'].split(' ').last
+    decoded = JsonWebToken.decode(token)
+    
+    return nil unless decoded
+    
+    User.find_by(id: decoded[:user_id])
+  end
 
   # Handle variables in form data, JSON body, or a blank value
   def prepare_variables(variables_param)
