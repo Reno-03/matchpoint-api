@@ -111,5 +111,60 @@ module Types
 
       match.messages.order(created_at: :asc)
     end
+
+    # ADMIN-RELATED QUERIES
+    # checks first if user is an admin
+
+    # Query to retrieve all users
+    field :all_users, [Types::AdminUserType], null: false do
+      description "Admin only: Get all users"
+      argument :limit, Integer, required: false, default_value: 50
+      argument :offset, Integer, required: false, default_value: 0
+    end
+    def all_users(limit:, offset:)
+      user = context[:current_user]
+      return [] unless user&.role == 'admin'
+
+      User.order(created_at: :desc).limit(limit).offset(offset)
+    end
+
+    # Query to retrieve a specific user info based on user_id
+    field :user_details, Types::AdminUserType, null: true do
+      description "Admin only: Get detailed user info"
+      argument :user_id, ID, required: true
+    end
+    def user_details(user_id:)
+      user = context[:current_user]
+      return nil unless user&.role == 'admin'
+
+      User.find_by(id: user_id)
+    end
+
+    # Query to retrieve the matches for a user 
+    field :user_matches, [Types::MatchType], null: false do
+      description "Admin only: Get all matches for a user"
+      argument :user_id, ID, required: true
+    end
+    def user_matches(user_id:)
+      admin = context[:current_user]
+      return [] unless admin&.role == 'admin'
+
+      target_user = User.find_by(id: user_id)
+      return [] unless target_user
+
+      target_user.all_matches
+    end
+
+    # Query to retrieve all matches
+    field :all_matches, [Types::MatchType], null: false do
+      description "Admin only: Get all matches in the system"
+      argument :limit, Integer, required: false, default_value: 50
+    end
+    def all_matches(limit:)
+      user = context[:current_user]
+      return [] unless user&.role == 'admin'
+
+      Match.order(created_at: :desc).limit(limit)
+    end
   end
 end
