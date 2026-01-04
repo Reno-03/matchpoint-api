@@ -50,11 +50,42 @@ users_data.each do |data|
   end
 end
 
-puts "🎉 Total users: #{User.count}"
+puts "✅ Created #{users_data.count} test users"
+
+# Create Maria and Juan match
+puts "\n💘 Creating Maria and Juan match..."
+
+maria = User.find_by(email: "maria@test.com")
+juan = User.find_by(email: "juan@test.com")
+
+if maria && juan
+  # Maria likes Juan
+  swipe1 = Swipe.create!(
+    swiper: maria,
+    swiped: juan,
+    action: 'like'
+  )
+  puts "✅ Maria liked Juan"
+
+  # Juan likes Maria back (creates match automatically)
+  swipe2 = Swipe.create!(
+    swiper: juan,
+    swiped: maria,
+    action: 'like'
+  )
+  puts "✅ Juan liked Maria back"
+  
+  match = Match.where('(user1_id = ? AND user2_id = ?) OR (user1_id = ? AND user2_id = ?)', 
+                       maria.id, juan.id, juan.id, maria.id).first
+  
+  if match
+    puts "🎉 Match created! ID: #{match.id}"
+  end
+end
 
 puts "\n📨 Creating sample messages..."
 
-# Get first two users who have a match
+# Get the Maria-Juan match
 match = Match.first
 if match
   sender = match.user1
@@ -78,7 +109,7 @@ if match
     )
   end
 
-  puts "✅ Created #{messages.count} messages"
+  puts "✅ Created #{messages.count} messages between #{sender.first_name} and #{receiver.first_name}"
 end
 
 puts "\n🎉 Seeding complete!"
