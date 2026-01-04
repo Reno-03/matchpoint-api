@@ -2,6 +2,7 @@
 Match.delete_all
 Swipe.delete_all
 Photo.delete_all
+Message.delete_all
 User.delete_all
 
 # Reset primary key sequences for Postgres
