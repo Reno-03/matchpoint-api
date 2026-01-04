@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_03_062905) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_04_012505) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -50,6 +50,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_03_062905) do
     t.index ["user1_id", "user2_id"], name: "index_matches_on_user1_id_and_user2_id", unique: true
     t.index ["user1_id"], name: "index_matches_on_user1_id"
     t.index ["user2_id"], name: "index_matches_on_user2_id"
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.bigint "match_id", null: false
+    t.boolean "read", default: false, null: false
+    t.bigint "receiver_id", null: false
+    t.bigint "sender_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["match_id", "created_at"], name: "index_messages_on_match_id_and_created_at"
+    t.index ["match_id"], name: "index_messages_on_match_id"
+    t.index ["receiver_id", "read"], name: "index_messages_on_receiver_id_and_read"
+    t.index ["receiver_id"], name: "index_messages_on_receiver_id"
+    t.index ["sender_id"], name: "index_messages_on_sender_id"
   end
 
   create_table "photos", force: :cascade do |t|
@@ -97,6 +112,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_03_062905) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "matches", "users", column: "user1_id"
   add_foreign_key "matches", "users", column: "user2_id"
+  add_foreign_key "messages", "matches"
+  add_foreign_key "messages", "users", column: "receiver_id"
+  add_foreign_key "messages", "users", column: "sender_id"
   add_foreign_key "photos", "users"
   add_foreign_key "swipes", "users", column: "swiped_id"
   add_foreign_key "swipes", "users", column: "swiper_id"

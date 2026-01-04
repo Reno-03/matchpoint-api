@@ -2,6 +2,8 @@
 
 module Types
   class MutationType < Types::BaseObject
+    field :mark_as_read, mutation: Mutations::MarkAsRead
+    field :send_message, mutation: Mutations::SendMessage
     # Mutations for swiping app
     field :create_swipe, mutation: Mutations::CreateSwipe
     field :upload_photo, mutation: Mutations::UploadPhoto

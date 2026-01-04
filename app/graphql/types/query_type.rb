@@ -68,5 +68,48 @@ module Types
       return [] unless user
       user.all_matches
     end
+
+    # Query for retrieving the inbox of all matches and latest messages for a User
+    field :my_inbox, [Types::InboxItemType], null: false do
+      description "Get inbox with all matches and latest messages"
+    end
+    def my_inbox
+      user = context[:current_user]
+      return [] unless user
+
+      user.all_matches.order(updated_at: :desc).map do |match|
+        other_user = match.other_user(user.id)
+        latest_message = match.latest_message
+        unread_count = match.unread_count_for(user.id)
+
+        {
+          match: match,
+          other_user: other_user,
+          latest_message: latest_message,
+          unread_count: unread_count,
+          updated_at: match.updated_at
+        }
+      end
+    end
+
+    # Query for getting all messages by a specific match
+    field :conversation_messages, [Types::MessageType], null: false do
+      description "Get all messages in a conversation"
+      argument :match_id, ID, required: true
+    end
+    def conversation_messages(match_id:)
+      user = context[:current_user]
+      return [] unless user
+
+      match = Match.find_by(id: match_id)
+      return [] unless match
+
+      # Verify user is part of this match
+      unless [match.user1_id, match.user2_id].include?(user.id)
+        return []
+      end
+
+      match.messages.order(created_at: :asc)
+    end
   end
 end

@@ -30,6 +30,11 @@ class User < ApplicationRecord
   has_many :matches_as_user1, class_name: 'Match', foreign_key: 'user1_id', dependent: :destroy
   has_many :matches_as_user2, class_name: 'Match', foreign_key: 'user2_id', dependent: :destroy
 
+  # MESSAGE ASSOSCIATIONS
+  has_many :sent_messages, class_name: 'Message', foreign_key: 'sender_id', dependent: :destroy
+  has_many :received_messages, class_name: 'Message', foreign_key: 'receiver_id', dependent: :destroy
+
+
   # this function calculates the age of the user based on birthdate
   def age
     return unless birthdate
@@ -77,5 +82,10 @@ class User < ApplicationRecord
   # a method that returns all users matched with this user
   def matched_users
     all_matches.map { |match| match.other_user(id) }
+  end
+
+  # MESSAGE-RELATED METHODS
+  def unread_messages_count
+    received_messages.unread.count
   end
 end
