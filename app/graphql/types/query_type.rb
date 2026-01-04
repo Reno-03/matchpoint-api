@@ -166,5 +166,39 @@ module Types
 
       Match.order(created_at: :desc).limit(limit)
     end
+
+    # Query to retrieve dashboard statistics
+    field :dashboard_stats, Types::DashboardStatsType, null: true do
+      description "Admin only: Get dashboard statistics"
+      argument :popular_limit, Integer, required: false, default_value: 10
+    end
+    def dashboard_stats(popular_limit:)
+      admin = context[:current_user]
+      return nil unless admin&.role == 'admin'
+
+      # Get popular users (most likes received)
+      popular_users = User
+        .joins(:swipes_received)
+        .where(swipes: { action: 'like' })
+        .select('users.*, COUNT(swipes.id) as likes_count')
+        .group('users.id')
+        .order('likes_count DESC')
+        .limit(popular_limit)
+        .map do |user|
+          {
+            user: user,
+            likes_received: user.likes_count.to_i,
+            matches_count: user.all_matches.count
+          }
+        end
+
+      {
+        total_users: User.count,
+        total_matches: Match.count,
+        total_swipes: Swipe.count,
+        total_messages: Message.count,
+        popular_users: popular_users
+      }
+    end
   end
 end
