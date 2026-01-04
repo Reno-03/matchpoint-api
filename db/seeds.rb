@@ -51,3 +51,39 @@ users_data.each do |data|
 end
 
 puts "🎉 Total users: #{User.count}"
+
+puts "\n📨 Creating sample messages..."
+
+# Get first two users who have a match
+match = Match.first
+if match
+  sender = match.user1
+  receiver = match.user2
+
+  messages = [
+    "Hey! How's it going?",
+    "Pretty good! Just got back from the gym. You?",
+    "Nice! I'm just relaxing. Want to grab coffee sometime?",
+    "That sounds great! How about this weekend?",
+    "Perfect! I'll DM you the details."
+  ]
+
+  messages.each_with_index do |content, index|
+    Message.create!(
+      sender: index.even? ? sender : receiver,
+      receiver: index.even? ? receiver : sender,
+      match: match,
+      content: content,
+      read: index < 3  # First 3 messages are read
+    )
+  end
+
+  puts "✅ Created #{messages.count} messages"
+end
+
+puts "\n🎉 Seeding complete!"
+puts "📊 Final counts:"
+puts "  Users: #{User.count}"
+puts "  Swipes: #{Swipe.count}"
+puts "  Matches: #{Match.count}"
+puts "  Messages: #{Message.count}"
