@@ -2,8 +2,14 @@
 
 module Types
   class MutationType < Types::BaseObject
+    # Mutations for admin update and delete 
+    field :delete_user, mutation: Mutations::DeleteUser
+    field :update_user, mutation: Mutations::UpdateUser
+
+    # Mutations for message features 
     field :mark_as_read, mutation: Mutations::MarkAsRead
     field :send_message, mutation: Mutations::SendMessage
+
     # Mutations for swiping app
     field :create_swipe, mutation: Mutations::CreateSwipe
     field :upload_photo, mutation: Mutations::UploadPhoto
