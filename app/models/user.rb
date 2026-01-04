@@ -6,7 +6,6 @@ class User < ApplicationRecord
   has_many :photos, dependent: :destroy
   has_many :swipes_made, class_name: 'Swipe', foreign_key: 'swiper_id', dependent: :destroy
   has_many :swipes_received, class_name: 'Swipe', foreign_key: 'swiped_id', dependent: :destroy
-  has_many :matches, dependent: :destroy
 
   # roles for user accounts
   ROLES = %w[user admin]
