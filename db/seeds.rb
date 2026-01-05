@@ -80,7 +80,7 @@ fixed_users = [
 ]
 
 fixed_users.each_with_index do |data, index|
-  User.find_or_create_by!(email: "#{data[:first_name].downcase}#{index + 1}@test.com") do |u|
+  User.find_or_create_by!(email: "#{data[:first_name].downcase}@test.com") do |u|
     u.first_name = data[:first_name]
     u.last_name = data[:last_name]
     u.password = "password123"
