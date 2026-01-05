@@ -21,6 +21,10 @@ class User < ApplicationRecord
   
   # before creating a user, set default role to 'user' if not provided
   before_validation :set_default_role
+
+  # phone validation
+  validate :mobile_number_valid
+  validates :mobile, presence: true
   
   # validates :photos, length: { minimum: 1, maximum: 5, message: 'must have 1-5 photos' }
 
@@ -55,6 +59,14 @@ class User < ApplicationRecord
   # user creates with role 'user' by default
   def set_default_role
     self.role ||= 'user'
+  end
+
+  def mobile_number_valid
+    return if mobile.blank?
+    digits = mobile.gsub(/\D/, '')
+    unless digits.length.between?(10, 15)
+      errors.add(:mobile, "must have 10-15 digits")
+    end
   end
 
   public

@@ -9,23 +9,26 @@ module Mutations
     argument :bio, String, required: false
     argument :city, String, required: false
     argument :role, String, required: false
+    argument :mobile, String, required: false        
+    argument :school, String, required: false        
+    argument :sexual_orientation, String, required: false 
 
     field :user, Types::AdminUserType, null: true
     field :errors, [String], null: false
 
     def resolve(user_id:, **args)
       admin = context[:current_user]
-      
-      # if user is not authenticated or an admin, return an error
+
+      # check authentication and authorization
       return { user: nil, errors: ['Not authenticated'] } unless admin
       return { user: nil, errors: ['Not authorized'] } unless admin.role == 'admin'
 
       user = User.find_by(id: user_id)
-
-      # if search user not found, return an error
       return { user: nil, errors: ['User not found'] } unless user
 
-      # if all validated, update the user attributes
+      # optionally sanitize mobile input
+      args[:mobile] = args[:mobile].gsub(/\D/, '') if args[:mobile]
+
       if user.update(args.compact)
         { user: user, errors: [] }
       else

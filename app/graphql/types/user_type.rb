@@ -6,6 +6,9 @@ module Types
     field :id, ID, null: false
     field :first_name, String
     field :last_name, String
+    field :mobile, String 
+    field :school, String
+    field :sexual_orientation, String
     field :email, String
     field :role, String
     field :birthdate, GraphQL::Types::ISO8601Date

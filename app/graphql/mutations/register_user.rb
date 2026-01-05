@@ -12,6 +12,9 @@ module Mutations
     argument :gender_interest, String, required: true
     argument :country, String, required: true
     argument :city, String, required: true
+    argument :mobile, String, required: true
+    argument :sexual_orientation, String, required: true
+    argument :school, String, required: false
     argument :bio, String, required: false
 
     # exposes the return fields after a user is registered
