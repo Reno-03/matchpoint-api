@@ -13,7 +13,7 @@ module Mutations
     field :user, Types::AdminUserType, null: true
     field :errors, [String], null: false
 
-    def resolve(user_id:, **attributes)
+    def resolve(user_id:, **args)
       admin = context[:current_user]
       
       # if user is not authenticated or an admin, return an error
@@ -26,7 +26,7 @@ module Mutations
       return { user: nil, errors: ['User not found'] } unless user
 
       # if all validated, update the user attributes
-      if user.update(attributes.compact)
+      if user.update(args.compact)
         { user: user, errors: [] }
       else
         { user: nil, errors: user.errors.full_messages }
