@@ -53,44 +53,48 @@ end
 
 puts "✅ Created #{users_data.count} test users"
 
-puts "\n👥 Creating 20 additional test users..."
+puts "\n👥 Creating 20 fixed test users..."
 
-first_names = %w[
-  Alex Jamie Chris Taylor Jordan Casey Morgan Riley Sam Dylan
-  Avery Quinn Parker Reese Rowan Skyler Cameron Devon Logan
+fixed_users = [
+  { first_name: "Alex", last_name: "Miller", gender: "Male", gender_interest: "Female", city: "Manila" },
+  { first_name: "Jamie", last_name: "Anderson", gender: "Female", gender_interest: "Male", city: "Cebu" },
+  { first_name: "Chris", last_name: "Brown", gender: "Male", gender_interest: "Female", city: "Davao" },
+  { first_name: "Taylor", last_name: "Wilson", gender: "Female", gender_interest: "Both", city: "Baguio" },
+  { first_name: "Jordan", last_name: "Martinez", gender: "Male", gender_interest: "Female", city: "Iloilo" },
+  { first_name: "Casey", last_name: "Lopez", gender: "Female", gender_interest: "Both", city: "Bacolod" },
+  { first_name: "Morgan", last_name: "Garcia", gender: "Male", gender_interest: "Female", city: "Cagayan" },
+  { first_name: "Riley", last_name: "Perez", gender: "Female", gender_interest: "Male", city: "Zamboanga" },
+  { first_name: "Sam", last_name: "Flores", gender: "Male", gender_interest: "Female", city: "Dumaguete" },
+  { first_name: "Dylan", last_name: "Ramos", gender: "Male", gender_interest: "Female", city: "Manila" },
+
+  { first_name: "Avery", last_name: "Santos", gender: "Female", gender_interest: "Both", city: "Cebu" },
+  { first_name: "Quinn", last_name: "Reyes", gender: "Male", gender_interest: "Female", city: "Davao" },
+  { first_name: "Parker", last_name: "Torres", gender: "Male", gender_interest: "Female", city: "Baguio" },
+  { first_name: "Reese", last_name: "Cruz", gender: "Female", gender_interest: "Male", city: "Iloilo" },
+  { first_name: "Rowan", last_name: "Delos Santos", gender: "Male", gender_interest: "Both", city: "Bacolod" },
+  { first_name: "Skyler", last_name: "Navarro", gender: "Female", gender_interest: "Male", city: "Cagayan" },
+  { first_name: "Cameron", last_name: "Mendoza", gender: "Male", gender_interest: "Female", city: "Zamboanga" },
+  { first_name: "Devon", last_name: "Villanueva", gender: "Male", gender_interest: "Both", city: "Dumaguete" },
+  { first_name: "Logan", last_name: "Castillo", gender: "Male", gender_interest: "Female", city: "Manila" },
+  { first_name: "Harper", last_name: "Aquino", gender: "Female", gender_interest: "Both", city: "Cebu" }
 ]
 
-last_names = %w[
-  Miller Anderson Brown Wilson Martinez Lopez Garcia Perez Flores Ramos
-]
-
-cities = %w[
-  Manila Cebu Davao Baguio Iloilo Bacolod Cagayan Zamboanga Dumaguete
-]
-
-genders = ["Male", "Female"]
-gender_interests = ["Male", "Female", "Both"]
-
-20.times do |i|
-  first_name = first_names.sample
-  last_name = last_names.sample
-
-  User.create!(
-    email: "#{first_name.downcase}@test.com",
-    first_name: first_name,
-    last_name: last_name,
-    password: "password123",
-    birthdate: Date.new(rand(1990..2002), rand(1..12), rand(1..28)),
-    gender: genders.sample,
-    gender_interest: gender_interests.sample,
-    country: "Philippines",
-    city: cities.sample,
-    bio: "Hey! I'm #{first_name} and I love meeting new people.",
-    role: "user"
-  )
+fixed_users.each_with_index do |data, index|
+  User.find_or_create_by!(email: "#{data[:first_name].downcase}#{index + 1}@test.com") do |u|
+    u.first_name = data[:first_name]
+    u.last_name = data[:last_name]
+    u.password = "password123"
+    u.birthdate = "1997-01-01"
+    u.gender = data[:gender]
+    u.gender_interest = data[:gender_interest]
+    u.country = "Philippines"
+    u.city = data[:city]
+    u.bio = "Hi! I'm #{data[:first_name]} from #{data[:city]}."
+    u.role = "user"
+  end
 end
 
-puts "✅ Created 20 additional test users"
+puts "✅ Created #{fixed_users.count} fixed test users"
 
 
 # Create Maria and Juan match
