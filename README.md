@@ -1,24 +1,28 @@
-# README
+# MatchPoint GraphQL Backend API
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Make sure to have the following installed:
 
-Things you may want to cover:
+- Ruby (version specified in the Rails app)
+- Rails
+- Bundler
+- PostgreSQL
 
-* Ruby version
+Verify:
+```sh
+ruby -v
+rails -v
+psql --version
+```
 
-* System dependencies
+### Rails GraphQL API Setup
+```sh
+cd matchpoint-api
+bundle install
+rails db:create db:migrate db:seed
+rails server
+```
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+The Rails GraphQL API will be available at:
+```sh
+http://localhost:3000/graphql
+```
