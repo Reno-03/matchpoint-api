@@ -76,7 +76,7 @@ gender_interests = ["Male", "Female", "Both"]
   last_name = last_names.sample
 
   User.create!(
-    email: "user#{i + 1}@test.com",
+    email: "#{first_name.downcase}@test.com",
     first_name: first_name,
     last_name: last_name,
     password: "password123",
