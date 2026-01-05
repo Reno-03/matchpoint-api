@@ -53,6 +53,46 @@ end
 
 puts "✅ Created #{users_data.count} test users"
 
+puts "\n👥 Creating 20 additional test users..."
+
+first_names = %w[
+  Alex Jamie Chris Taylor Jordan Casey Morgan Riley Sam Dylan
+  Avery Quinn Parker Reese Rowan Skyler Cameron Devon Logan
+]
+
+last_names = %w[
+  Miller Anderson Brown Wilson Martinez Lopez Garcia Perez Flores Ramos
+]
+
+cities = %w[
+  Manila Cebu Davao Baguio Iloilo Bacolod Cagayan Zamboanga Dumaguete
+]
+
+genders = ["Male", "Female"]
+gender_interests = ["Male", "Female", "Both"]
+
+20.times do |i|
+  first_name = first_names.sample
+  last_name = last_names.sample
+
+  User.create!(
+    email: "user#{i + 1}@test.com",
+    first_name: first_name,
+    last_name: last_name,
+    password: "password123",
+    birthdate: Date.new(rand(1990..2002), rand(1..12), rand(1..28)),
+    gender: genders.sample,
+    gender_interest: gender_interests.sample,
+    country: "Philippines",
+    city: cities.sample,
+    bio: "Hey! I'm #{first_name} and I love meeting new people.",
+    role: "user"
+  )
+end
+
+puts "✅ Created 20 additional test users"
+
+
 # Create Maria and Juan match
 puts "\n💘 Creating Maria and Juan match..."
 
